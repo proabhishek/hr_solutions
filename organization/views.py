@@ -126,8 +126,8 @@ class SignInView(APIView):
             auth_token = generate_auth_token()
             while OrganizationSetUp.objects.filter(auth_token=auth_token):
                 auth_token = generate_auth_token()
-            organization.auth_token = auth_token
-            organization.save()
+            organization[0].auth_token = auth_token
+            organization[0].save()
             return {"success": 1, "data": {"auth_token": auth_token}, 'message': 'Sign In Successfully', 'statusCode': 200}
 
 

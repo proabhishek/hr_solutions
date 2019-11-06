@@ -14,17 +14,15 @@ def normalise_phone(phone):
 # Create an SNS client
 client = boto3.client(
     "sns",
-    aws_access_key_id=config("ACCESS_KEY_ID"),
-    aws_secret_access_key=config("AWS_SECRET_KEY"),
-    region_name=config("AWS_REGION")
+    aws_access_key_id="AKIA3OEA3OHXLISUDK2N",
+    aws_secret_access_key="7bBgRtoPQuNT99egVg7zBOaT2jNT3Ue+RnnxTrZy",
+    region_name="us-east-1"
 )
 
 
 # Send your sms message.
 def notify(phone, message):
-    import pdb
-    pdb.set_trace()
     client.publish(
-    PhoneNumber=phone,
-    Message=message
+        PhoneNumber=phone,
+        Message=message
     )
