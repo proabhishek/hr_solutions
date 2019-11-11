@@ -2,6 +2,7 @@ import re
 import boto3
 from decouple import config
 from django.conf import settings
+import uuid
 
 
 def normalise_phone(phone):
@@ -26,3 +27,7 @@ def notify(phone, message):
         PhoneNumber=phone,
         Message=message
     )
+
+
+def generate_auth_token():
+    return uuid.uuid4()

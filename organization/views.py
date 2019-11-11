@@ -197,6 +197,25 @@ class VerifyOtp(APIView):
             return {'success': 0, 'message': "Wrong Otp"}
 
 
+class ChangePassword(APIView):
+    permission_classes = (AllowAny,)
+    @api_response
+    def post(self, request):
+        auth_token = request.META.get('HTTP_AUTH_TOKEN', '')
+        if not auth_token:
+            return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
+        organization = OrganizationSetUp.objects.filter(auth_token=auth_token)
+        if not organization:
+            return {'success': 0, 'error': "Organization not found", 'data': {}, 'statusCode': 400}
+        old_password = request.data['old_password']
+        new_password = request.data['new_password']
+        if not  organization[0].password == old_password:
+            return {'success': 0, 'error': "Old Password dinot match", 'data': {}, 'statusCode': 400}
+        organization[0].password = new_password
+        organization[0].save()
+        return {"success": 1, "data": "", 'message': 'Password CHanged successfully', 'statusCode': 200}
+
+
 class Logout(APIView):
     permission_classes = (AllowAny,)
 
