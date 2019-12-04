@@ -34,44 +34,44 @@ class BulkEmployeeUpdateExcel(APIView):
             for cell in row:
                 row_data.append(str(cell.value))
             excel_data.append(row_data)
-        # length = len(excel_data)
-        # i = 1
-        # while i<length:
-        #     try:
-        #         data = excel_data[i]
-        #         password = ''.join(random.choices(string.ascii_lowercase +
-        #                                           string.digits, k = 8))
+        length = len(excel_data)
+        i = 1
+        while i<length:
+            try:
+                data = excel_data[i]
+                password = ''.join(random.choices(string.ascii_lowercase +
+                                                  string.digits, k = 8))
 
-            #     employee = Employee.objects.create(
-            #         name=data[0],
-            #         employee_id = data[1],
-            #         designation = data[2],
-            #         department = data[3],
-            #         pan_card_number = data[4],
-            #         email = data[5],
-            #         phone = data[6],
-            #         date_of_birth = data[7],
-            #         date_of_joining = data[8],
-            #         blood_group = data[9],
-            #         emergency_contact = data[10],
-            #         confirmation_date = data[11],
-            #         date_of_exit = data[12],
-            #         password = password
-            #     )
-            #     # if employee:
-            #     #     auth_token = common.generate_auth_token()
-            #     #     while Employee.objects.filter(auth_token=auth_token):
-            #     #         auth_token = common.generate_auth_token()
-            #     #     employee.auth_token = auth_token
-            #     #     employee.save()
-            #     i = i + 1
-            # except Exception as e:
-            #     return {"success": 0, "data": "", 'message': e.message,
-            #             'statusCode': 400}
-            #     # return {"success": 0, "data": "", 'message': "exception",
-            #     #         'statusCode': 400}
+                employee = Employee.objects.create(
+                    name=data[0],
+                    employee_id = data[1],
+                    designation = data[2],
+                    department = data[3],
+                    pan_card_number = data[4],
+                    email = data[5],
+                    phone = data[6],
+                    date_of_birth = data[7],
+                    date_of_joining = data[8],
+                    blood_group = data[9],
+                    emergency_contact = data[10],
+                    confirmation_date = data[11],
+                    date_of_exit = data[12],
+                    password = password
+                )
+                # if employee:
+                #     auth_token = common.generate_auth_token()
+                #     while Employee.objects.filter(auth_token=auth_token):
+                #         auth_token = common.generate_auth_token()
+                #     employee.auth_token = auth_token
+                #     employee.save()
+                i = i + 1
+            except :
+                # return {"success": 0, "data": "", 'message': e.message,
+                #         'statusCode': 400}
+                return {"success": 0, "data": "", 'message': "exception",
+                        'statusCode': 400}
 
-        return {"success": 1, "data": excel_data, 'message': 'Successfully received',
+        return {"success": 1, "data": excel_data, 'message': "successsss",
                 'statusCode': 200}
 
 

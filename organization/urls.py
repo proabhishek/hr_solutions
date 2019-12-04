@@ -11,4 +11,5 @@ urlpatterns = [
     path('keyword/', CompanyKeywordView.as_view(),  name='organization-keyword'),
     path('logout/', Logout.as_view(),  name='logout'),
     path('change-password/', ChangePassword.as_view(),  name='employee-signin'),
+    path('update-profile/', UpdateProfile.as_view(),  name='update-profile')
     ]
