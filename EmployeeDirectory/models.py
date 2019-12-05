@@ -1,5 +1,7 @@
 from django.db import models
 
+# select the date format you will chose for writing all dates in excel
+
 
 class Employee(models.Model):
     name = models.CharField(max_length=50)

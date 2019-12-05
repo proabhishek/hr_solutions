@@ -101,9 +101,11 @@ class OtpSendView(APIView):
         auth_token = request.META.get('HTTP_AUTH_TOKEN', '')
         if not auth_token:
             return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
-        organization = OrganizationSetUp.objects.filter(auth_token=auth_token)
-        phone = organization[0].contact_number
-        send_message(phone, organization[0])
+        organization = OrganizationSetUp.objects.filter(auth_token=auth_token).first
+        if not organization:
+            return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
+        phone = organization.contact_number
+        send_message(phone, organization)
         return {'success': True, "data": {"last_4_digit_phone": phone[-4:]}, 'message': "Otp sent successfully"}
 
 
@@ -115,11 +117,11 @@ class VerifyOtp(APIView):
         auth_token = request.META.get('HTTP_AUTH_TOKEN', '')
         if not auth_token:
             return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
-        organization = OrganizationSetUp.objects.filter(auth_token=auth_token)
+        organization = OrganizationSetUp.objects.filter(auth_token=auth_token).first
         if not organization:
             return {"success": 0, "data": "", 'message': 'Organization doesnot exists', 'statusCode': 400}
         otp = request.data.get('otp')
-        company = CompanyVerification.objects.get(company=organization[0])
+        company = CompanyVerification.objects.get(company=organization)
         if int(company.otp) == int(otp):
             return {'success': 1, 'message': "Correct Otp", 'data': ""}
         else:

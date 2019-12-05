@@ -15,13 +15,32 @@ from common import common
 # Create your views here.
 
 
+class ShowExcelData(APIView):
+    permission_classes = (AllowAny,)
+
+    @api_response
+    def post(self, request):
+        excel_file = request.data.get('excel-file')
+        wb = openpyxl.load_workbook(excel_file)
+        # getting a particular sheet by name out of many sheets
+        worksheet = wb["Sheet1"]
+        excel_data = list()
+        # iterating over the rows and
+        # getting value from each cell in row
+        for row in worksheet.iter_rows():
+            row_data = list()
+            for cell in row:
+                row_data.append(str(cell.value))
+            excel_data.append(row_data)
+        return {"success": 1, "data": excel_data, 'message': "",
+                'statusCode': 200}
+
+
 class BulkEmployeeUpdateExcel(APIView):
     permission_classes = (AllowAny,)
 
     @api_response
     def post(self, request):
-        # import pdb
-        # pdb.set_trace()
         excel_file = request.data.get('excel-file')
         wb = openpyxl.load_workbook(excel_file)
         # getting a particular sheet by name out of many sheets
@@ -58,12 +77,6 @@ class BulkEmployeeUpdateExcel(APIView):
                     date_of_exit = data[12],
                     password = password
                 )
-                # if employee:
-                #     auth_token = common.generate_auth_token()
-                #     while Employee.objects.filter(auth_token=auth_token):
-                #         auth_token = common.generate_auth_token()
-                #     employee.auth_token = auth_token
-                #     employee.save()
                 i = i + 1
             except :
                 # return {"success": 0, "data": "", 'message': e.message,
@@ -139,8 +152,8 @@ class ChangePassword(APIView):
             return {'success': 0, 'error': "Employee not found", 'data': {}, 'statusCode': 400}
         old_password = request.data['old_password']
         new_password = request.data['new_password']
-        if not  employee[0].password == old_password:
-            return {'success': 0, 'error': "Old Password dinot match", 'data': {}, 'statusCode': 400}
+        if not employee[0].password == old_password:
+            return {'success': 0, 'error': "Old Password didnot match", 'data': {}, 'statusCode': 400}
         employee[0].password = new_password
         employee[0].save()
         return {"success": 1, "data": "", 'message': 'Password CHanged successfully', 'statusCode': 200}

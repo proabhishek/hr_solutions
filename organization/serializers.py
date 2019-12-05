@@ -18,3 +18,9 @@ class TrialSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationSetUp
         fields = ['id', 'is_active']
+
+#
+# class CompanyAddressSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = OrganizationSetUp
+#         fields = ['id', 'is_active']
