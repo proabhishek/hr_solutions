@@ -15,7 +15,7 @@ class OrganizationSetUp(models.Model):
     organization_email = models.CharField(max_length=200, unique=True)
     password = models.CharField(max_length=20)
     contact_number = models.CharField(max_length=13, blank=True, null=True)
-    domain = models.CharField(max_length=100, unique=True)
+    domain = models.CharField(max_length=100, null=True, blank=True)
     domain_type = models.CharField(choices=DOMAIN_TYPE_CHOICE, max_length=20, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     auth_token = models.CharField(max_length=40, null=True, blank=True)

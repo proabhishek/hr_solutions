@@ -41,7 +41,8 @@ def prepare_message(otp):
 
 def send_message(phone, organization):
     # phone = common.normalise_phone(phone)
-    otp = generate_otp()
+    # otp = generate_otp()
+    otp = "1234"
     message = prepare_message(otp)
     code = "+91"
     phone = code + phone
@@ -53,7 +54,7 @@ def send_message(phone, organization):
     except:
         obj = CompanyVerification(company=organization, otp=otp, otp_sent_at=datetime.datetime.now())
         obj.save()
-    common.notify(phone, message)
+    # common.notify(phone, message)
 
 
 class OrganizationSignUpView(APIView):
@@ -153,22 +154,22 @@ class CompanyKeywordView(APIView):
         auth_token = request.META.get('HTTP_AUTH_TOKEN', '')
         if not auth_token:
             return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
-        organization = OrganizationSetUp.objects.filter(auth_token=auth_token)
+        organization = OrganizationSetUp.objects.filter(auth_token=auth_token).first
         if not organization:
             return {"success": 0, "data": "", 'message': 'Organization doesnot exists', 'statusCode': 400}
-        domain = request.data['domain']
-        domain_type = request.data['domain_type']
+        domain = request.data.get('domain')
+        domain_type = request.data.get('domain_type')
         if not domain:
             return {"success": 0, "data": "", 'message': 'Domain is missing', 'statusCode': 400}
         if not domain_type:
             return {"success": 0, "data": "", 'message': 'Domain Type is missing', 'statusCode': 400}
-        duplicate_company_keyword = OrganizationSetUp.objects.filter(domain=domain)
-        if duplicate_company_keyword:
+        duplicate_domain = OrganizationSetUp.objects.filter(domain=domain)
+        if duplicate_domain:
             return {"success": 0, "data": "", 'message': 'Already Exists, Please chose a new one',
                     'statusCode': 400}
-        organization[0].domain = domain
-        organization[0].domain_type = domain_type
-        organization[0].save()
+        organization.domain = domain
+        organization.domain_type = domain_type
+        organization.save()
 
         return {"success": 1, "data": "", 'message': '',
                 'statusCode': 200}
@@ -179,16 +180,13 @@ class OrganizationSetUP(APIView):
     @api_response
     def post(self, request):
         auth_token = request.META.get('HTTP_AUTH_TOKEN', '')
-        organization = OrganizationSetUp.objects.filter(auth_token=auth_token)
+        organization = OrganizationSetUp.objects.filter(auth_token=auth_token).first
         if not organization:
             return {'success': 0, 'error': "Token Missing", 'data': {}, 'statusCode': 400}
-        organization = organization[0]
         organization.logo_url = request.data['logo_url']
-        organization.tagline = request.data['tagline']
-        organization.pan_link = request.data['pan_link']
-        organization.contact_number = request.data['contact_number']
-        organization.office_address = request.data['office_address']
+        organization.pan_number = request.data['pan_number']
         organization.save()
+
         return {"success": 1, "data":"", 'message': 'Updated successfully',
                     'statusCode': 200}
 
